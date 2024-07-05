@@ -21,7 +21,7 @@ Version:                1.68.2
 The easiest, most secure way to use WireGuard and 2FA.}
 
 Name:           tailscale
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The easiest, most secure way to use WireGuard and 2FA
 
 # main source code is BSD-3-Clause
@@ -851,6 +851,9 @@ install -dpm 600 %{buildroot}%{_localstatedir}/cache/tailscale
 
 
 %changelog
+* Fri Jul 05 2024 Jonathan Wright <jonathan@almalinux.org> - 1.68.2-2
+- Fix systemd service file
+
 * Fri Jul 05 2024 Jonathan Wright <jonathan@almalinux.org> - 1.68.2-1
 - update to 1.68.2 rhbz#2295738
 
