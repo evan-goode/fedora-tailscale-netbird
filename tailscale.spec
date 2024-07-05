@@ -9,7 +9,7 @@
 
 # https://github.com/tailscale/tailscale
 %global goipath         github.com/tailscale/tailscale
-Version:                1.68.1
+Version:                1.68.2
 
 %if 0%{?rhel}
 %gometa
@@ -851,6 +851,9 @@ install -dpm 600 %{buildroot}%{_localstatedir}/cache/tailscale
 
 
 %changelog
+* Fri Jul 05 2024 Jonathan Wright <jonathan@almalinux.org> - 1.68.2-1
+- update to 1.68.2 rhbz#2295738
+
 * Mon Jul 01 2024 Jonathan Wright <jonathan@almalinux.org> - 1.68.1-1
 - Update to 1.68.1
 
