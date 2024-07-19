@@ -9,7 +9,7 @@
 
 # https://github.com/tailscale/tailscale
 %global goipath         github.com/tailscale/tailscale
-Version:                1.68.2
+Version:                1.70.0
 
 %if 0%{?rhel}
 %gometa
@@ -21,7 +21,7 @@ Version:                1.68.2
 The easiest, most secure way to use WireGuard and 2FA.}
 
 Name:           tailscale
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        The easiest, most secure way to use WireGuard and 2FA
 
 # main source code is BSD-3-Clause
@@ -851,6 +851,9 @@ install -dpm 600 %{buildroot}%{_localstatedir}/cache/tailscale
 
 
 %changelog
+* Fri Jul 19 2024 Jonathan Wright <jonathan@almalinux.org> - 1.70.0-1
+- update to 1.70.0 rhbz#2298530
+
 * Fri Jul 05 2024 Jonathan Wright <jonathan@almalinux.org> - 1.68.2-2
 - Fix systemd service file
 
