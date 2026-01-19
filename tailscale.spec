@@ -21,16 +21,20 @@ Version:                1.92.5
 The easiest, most secure way to use WireGuard and 2FA.}
 
 Name:           tailscale
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The easiest, most secure way to use WireGuard and 2FA
 
 # main source code is BSD-3-Clause
 # see comments above provides tags for bundled license breakdown
 License:        BSD-2-Clause AND MIT AND Apache-2.0 AND MPL-2.0 AND GPL-3.0-or-later AND ISC AND 0BSD AND BSD-3-Clause
 URL:            %{gourl}
-Source:         tailscale-%{version}-vendored.tar.xz
-Source:         tailscaled.service
-Source:         create-vendor-tarball.sh
+Source0:        tailscale-%{version}-vendored.tar.xz
+Source1:        tailscaled.service
+Source2:        tailscale-systray-user.service
+Source10:       create-vendor-tarball.sh
+
+# Fedora-specific patch to handle pre-installed user unit
+Patch:          tailscale-1.92.5-systray-unit.patch
 
 BuildRequires:     systemd-rpm-macros
 Requires:          iproute
@@ -890,11 +894,11 @@ Provides:       bundled(golang(sigs.k8s.io/structured-merge-diff/v4)) = v4.4.2
 
 %prep
 %goprep %{?with_vendor:-k}
-#%%autopatch -p1
+%autopatch -p1
 
 
 %build
-# https://github.com/tailscale/tailscale/blob/v1.68.1/README.md#building
+# https://github.com/tailscale/tailscale/blob/v1.92.5/README.md#building
 export LDFLAGS="-X tailscale.com/version.longStamp=%{version} -X tailscale.com/version.shortStamp=%{version}"
 
 %gobuild -o %{gobuilddir}/bin/tailscale ./cmd/tailscale
@@ -910,6 +914,7 @@ install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 
 # install systemd service file
 install -Dpm 644 %{SOURCE1} %{buildroot}%{_unitdir}/tailscaled.service
+install -Dpm 644 %{SOURCE2} %{buildroot}%{_userunitdir}/tailscale-systray.service
 
 # install dirs to be owned by package (it will auto create them otherwise)
 install -dpm 600 %{buildroot}%{_sharedstatedir}/tailscale
@@ -925,14 +930,17 @@ install -dpm 600 %{buildroot}%{_localstatedir}/cache/tailscale
 
 %post
 %systemd_post tailscaled.service
+%systemd_user_post tailscale-systray.service
 
 
 %preun
 %systemd_preun tailscaled.service
+%systemd_user_preun tailscale-systray.service
 
 
 %postun
 %systemd_postun_with_restart tailscaled.service
+%systemd_user_postun_with_restart tailscale-systray.service
 
 
 %files
@@ -946,6 +954,7 @@ install -dpm 600 %{buildroot}%{_localstatedir}/cache/tailscale
 %doc derp/README.md
 %{_bindir}/tailscale{,d}
 %{_unitdir}/tailscaled.service
+%{_userunitdir}/tailscale-systray.service
 %dir %{_sharedstatedir}/tailscale/
 %dir %{_localstatedir}/cache/tailscale
 
@@ -955,6 +964,9 @@ install -dpm 600 %{buildroot}%{_localstatedir}/cache/tailscale
 
 
 %changelog
+* Mon Jan 19 2026 Neal Gompa <ngompa@fedoraproject.org> - 1.92.5-2
+- Add tailscale-systray.service unit for user desktop systray support
+
 * Sun Jan 18 2026 LuK1337 <priv.luk@gmail.com> - 1.92.5-1
 - update to 1.92.5 rhbz#2371360
 
