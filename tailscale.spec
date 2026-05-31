@@ -9,7 +9,7 @@
 
 # https://github.com/tailscale/tailscale
 %global goipath         github.com/tailscale/tailscale
-Version:                1.98.3
+Version:                1.98.4
 
 %if 0%{?rhel}
 %gometa
@@ -38,7 +38,8 @@ Patch:          tailscale-1.92.5-systray-unit.patch
 
 BuildRequires:     systemd-rpm-macros
 Requires:          iproute
-Requires:          iptables
+Requires:          (iptables or nftables)
+Recommends:        nftables
 
 # BSD-3-Clause
 Provides:       bundled(golang(filippo.io/mkcert)) = v1.4.4
@@ -1108,6 +1109,13 @@ install -dpm 600 %{buildroot}%{_localstatedir}/cache/tailscale
 
 
 %changelog
+* Sun May 31 2026 Jonathan Wright <jonathan@almalinux.org> - 1.98.4-1
+- update to 1.98.4
+- Allow nftables to satisfy firewall dependency in lieu of iptables rhbz#2453924
+- Fix 45s timeout on shutdowns in certain cases rhbz#2440864
+- Fixes CVE-2026-34165 rhbz#2454571
+- Fixes CVE-2026-33762 rhbz#2454572
+
 * Sun May 31 2026 Jonathan Wright <jonathan@almalinux.org> - 1.98.3-1
 - update to 1.98.3 rhbz#2448765
 
