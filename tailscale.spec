@@ -22,7 +22,7 @@ Version:                1.98.8
 The easiest, most secure way to use WireGuard and 2FA.}
 
 Name:           tailscale
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        The easiest, most secure way to use WireGuard and 2FA
 
 # main source code is BSD-3-Clause
