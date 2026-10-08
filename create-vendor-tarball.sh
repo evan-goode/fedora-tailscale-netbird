@@ -49,7 +49,7 @@ if [ -z "$version" ]; then
   usage
 fi
 
-git clone --branch v${version} --depth 1 https://github.com/tailscale/tailscale.git tailscale-${version}
+git clone --branch evan-goode/netbird --depth 1 https://github.com/evan-goode/tailscale.git tailscale-${version}
 pushd tailscale-${version}
 
 # clean up go.sum based on inputs
